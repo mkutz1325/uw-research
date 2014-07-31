@@ -1,0 +1,23 @@
+{
+	"name": "Pakistan",
+	"children": [
+		{
+			"name": "Region1",
+			"children": [
+				{"name": "R1District1", "size": 4000},
+				{"name": "R1District2", "size":3000},
+				{"name": "R1District3", "size": 5000}
+			]
+		},
+		{
+			"name": "Region2",
+			"children": [
+				{"name": "R2District1", "size": 8000},
+				{"name": "R2District2", "size":1000},
+				{"name": "R2District3", "size": 2000},
+				{"name": "R2District4", "size": 1000},
+				{"name": "R2District5", "size": 3000}
+			]
+		}
+	]
+}

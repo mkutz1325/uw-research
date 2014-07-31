@@ -1,0 +1,22 @@
+<html>
+  <head>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'barchart/barstyle.css' %}" />
+	<svg class="chart"></svg>
+
+	<script src="{% static 'barchart/d3.js' %}" charset="utf-8"></script>
+  </head>
+  <body>
+	<data id="csvdata">name,value
+	Michael,2170
+	Christina, 2190
+	Joey, 2010
+	Emily, 1970
+	Dad, 1650
+	Mom, 2050
+	Kerry, 2350
+	</data>
+	<p>Well?</p>
+	<script src="{% static 'barchart/barchart.js' %}" charset="utf-8"></script>
+  </body>
+</html>
