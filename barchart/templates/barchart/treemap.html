@@ -9,7 +9,7 @@
 	<body>
 		<div id="body">
 		  <div id="footer">
-			Energy Consumption in the Cold Chain
+			Cost of the Cold Chain, Annual, Tanzania 2012
 			<div class="hint">click or option-click to descend or ascend</div>
 			<div><select>
 			  <option value="req">Capacity Requirements</option>
@@ -18,7 +18,14 @@
 			  <option value="cost">Cost of Ownership for District CC Equipment</option>
 			  <option value="energy">Energy Costs</option>
 			  <option value="maint">Maintenance Costs</option>
+			  <option value="cpb">Cost per Birth</option>
 			</select></div>
+			<h2>National Statistics</h2>
+				<p>Total Births: 690,872</p>
+				<p>Total Vaccine Volume Delivered: 59,880L</p>
+				<p>Total Cost of Ownership: $54,636.98</p>
+				<p>Total Energy Cost: $4,186.32</p>
+				<p>Total Maintenance Cost: $9,292.90</p>
 		  </div>
 		</div>
 		<script>
@@ -103,6 +110,10 @@
 				  treemap.value(maint).nodes(root);
 				  svg.selectAll("g.cell").select("text").text(function(d) {
 				    return d.parent.name + d.name + ": " + "$" + d.maint});				
+				} else if (this.value=="cpb") {
+				  treemap.value(cpb).nodes(root);
+				  svg.selectAll("g.cell").select("text").text(function(d) {
+				    return d.parent.name + d.name + ": " + "$" + cpb(d)});
 				}
 				zoom(node);
 			  });
@@ -130,6 +141,10 @@
 			
 			function maint(d) {
 			  return d.maint;
+			}
+			
+			function cpb(d) {
+			  return (d.cost / d.births);
 			}
 
 			function zoom(d) {

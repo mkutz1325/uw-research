@@ -38,6 +38,13 @@ def parseEnergyUseData():
         #DistrictName, Population, Births,BCG issued, OPV issued, Penta, Pneumo, Measles, YF, TT, Total Q, Total V, capReq
         #iterate through rows in the csv file, all but the first
         first = True
+        #save national info for django model
+        nationBirths = 0
+        nationReq = 0.0
+        nationVol = 0.0
+        nationCost = 0.0
+        nationEnergy = 0.0
+        nationMaint = 0.0
         for row in datareader:
             if first:
                 first = False
@@ -49,10 +56,17 @@ def parseEnergyUseData():
             capReq = float(row[12].strip(' ').replace(',', ''))
             capReq = int(round(capReq))
             # assign pqs models to the district
-            # TODO bad code structure to only allow parser.py access to this info
+            # TODO bad code structure to only allow parser.py access district info
             districtPqsModels = assignPqs(capReq, allPqsModels)
             totCost, totEnergy, totMaint = calcStatsOfSelection(districtPqsModels)
             births = int(row[2].strip(' ').replace(',', ''))
+            #add to nation totals
+            nationCost += totCost
+            nationEnergy += totEnergy
+            nationMaint += totMaint
+            nationReq += capReq
+            nationVol += totVol
+            #add to district dictionary
             #csv file has multiple districts per region, so add to existing region entry if 
             #already seen
             if region in regions:
@@ -67,6 +81,7 @@ def parseEnergyUseData():
                         "births": births, "cost": totCost, 
                         "energy": totEnergy, "maint": totMaint,
                         "volume": totVol}]}
+    print nationCost, " ", nationEnergy, " ", nationMaint
     return regions
 
 ''' write data to a given file '''
