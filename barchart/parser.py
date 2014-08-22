@@ -86,13 +86,36 @@ def parsePqs():
             mnt = round(mnt*100)/100.0
             model = PqsModel(type, cpl, cap, en, mnt)
             models.append(model)
-
+    return models
     
-#use a capacity requirement to assign pqs models to 
+''' use a capacity requirement to assign pqs models to a district'''
 def assignPqs(capReq, options):
-    what = True
+    #keep track of which models are chosen
     chosen = []
-    sortedOptionsByCap = quickSortByCap(options)
+    #sort by capacity for greedy selection algorithm
+    #goal is not to choose most efficient options; want 
+    #a sub-optimal selection to make visualization more interesting
+    models = quickSortByCap(options)
+    filled = 0
+    #while the requirement not filled (will not run more than twice
+    #given the current data)
+    while filled < capReq:
+        for i in range(0, len(models)):
+            model = models[i]
+            #if this model fills capacity requirement
+            if model.capacity >= (capReq - filled):
+                chosen.append(model)
+                filled += model.capacity
+                #don't check any more models
+                break
+            #if this is the last option, and cap req not filled
+            if i == len(models) - 1:
+                #add it to options
+                chosen.append(model)
+                #record how much has been filled, and go through
+                #loop of model choice again
+                filled += model.capacity
+    return chosen
 
 #sort options list by capacity using quick sort
 def quickSortByCap(options):
