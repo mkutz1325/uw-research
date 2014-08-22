@@ -7,6 +7,7 @@ import csv
 import json
 import random
 
+''' basic information about refrigerator models for vis '''
 class PqsModel():
     # Type    Cost/Liter    Capacity    Energy Cost    MaintCost
     def __init__(self, type, costPerLiter, capacity, totEnergy, totMaint):
@@ -15,11 +16,13 @@ class PqsModel():
         self.capacity = capacity
         self.totEnergy = totEnergy
         self.totMaint = totMaint
+        
+    def __str__(self):
+        return type
 
-
-#create a dictionary from information in the district info file
+''' create a dictionary from information in the district info file '''
 def parseEnergyUseData():
-    with open('static/barchart/EnergyUseData.csv', 'rb') as csvfile:
+    with open('static/barchart/DistrictInfo.csv', 'rb') as csvfile:
         datareader = csv.reader(csvfile)
         regions = dict()
         #DistrictName, Population, Births,BCG issued, OPV issued, Penta, Pneumo, Measles, YF, TT, Total Q, Total V, capReq
@@ -63,7 +66,9 @@ def encodeDictToJSON(inDict):
     print result
     return result
 
+''' parse the pqs csv file and return a list of models ''' 
 def parsePqs():
+    models = []
     with open('static/barchart/pqs.csv', 'rb') as csvfile:
         datareader = csv.reader(csvfile)
         #format: Type, Cost/Liter, Capacity, Energy Cost, MaintCost
@@ -71,7 +76,16 @@ def parsePqs():
         first = True
         #create a new pqs object out of each row
         for row in datareader:
-            print 'found row'
+            if first:
+                first = False
+                continue
+            type, cpl, cap, en, mnt = row
+            # round dollar values
+            cpl = round(cpl*100)/100.0
+            en = round(en*100)/100.0
+            mnt = round(mnt*100)/100.0
+            model = PqsModel(type, cpl, cap, en, mnt)
+            models.append(model)
 
     
 #use a capacity requirement to assign pqs models to 
