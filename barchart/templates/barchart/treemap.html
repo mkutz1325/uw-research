@@ -12,8 +12,8 @@
 			Energy Consumption in the Cold Chain
 			<div class="hint">click or option-click to descend or ascend</div>
 			<div><select>
-			  <option value="size">Size</option>
-			  <option value="count">Count</option>
+			  <option value="req">Capacity Requirements</option>
+			  <option value="births">Births</option>
 			</select></div>
 		  </div>
 		</div>
@@ -22,15 +22,16 @@
 				h = 800 - 180,
 				x = d3.scale.linear().range([0, w]),
 				y = d3.scale.linear().range([0, h]),
-				color = d3.scale.category20c(),
+				color = d3.scale.category10(),
 				root,
 				node;
+				
 
 			var treemap = d3.layout.treemap()
 				.round(false)
 				.size([w, h])
 				.sticky(true)
-				.value(function(d) { return d.size; });
+				.value(function(d) { return d.req; });
 
 			var svg = d3.select("#body").append("div")
 				.attr("class", "chart")
@@ -54,34 +55,54 @@
 				  .attr("class", "cell")
 				  .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 				  .on("click", function(d) { return zoom(node == d.parent ? root : d.parent); });
+				  
 
 			  cell.append("svg:rect")
 				  .attr("width", function(d) { return d.dx - 1; })
 				  .attr("height", function(d) { return d.dy - 1; })
-				  .style("fill", function(d) { return color(d.parent.name); });
+				  .style("fill", function(d) { return color(d.parent.name); })
+				  .style({'border-color': 'black'});
 
 			  cell.append("svg:text")
 				  .attr("x", function(d) { return d.dx / 2; })
 				  .attr("y", function(d) { return d.dy / 2; })
 				  .attr("dy", ".35em")
 				  .attr("text-anchor", "middle")
-				  .text(function(d) { return d.name; })
+				  .text(function(d) {
+					return d.req>0 ? d.parent.name + d.name + ": " + d.req + "L": ""; 
+				  })
 				  .style("opacity", function(d) { d.w = this.getComputedTextLength(); return d.dx > d.w ? 1 : 0; });
 
 			  d3.select(window).on("click", function() { zoom(root); });
 
 			  d3.select("select").on("change", function() {
-				treemap.value(this.value == "size" ? size : count).nodes(root);
+				if (this.value == "births") {
+				  treemap.value(births).nodes(root);
+				  svg.selectAll("g.cell").select("text").text(function(d) {
+				    return d.parent.name + d.name + ": " + d.births});
+				} else {
+				  treemap.value(req).nodes(root);
+				  svg.selectAll("g.cell").select("text").text(function(d) {
+				    return d.parent.name + d.name + ": " + d.req + "L"});
+				}
 				zoom(node);
 			  });
 			});
 
-			function size(d) {
-			  return d.size;
+			function req(d) {
+			  return d.req;
 			}
 
 			function count(d) {
 			  return 1;
+			}
+			
+			function births(d) {
+			  return d.births;
+			}
+			
+			function cov(d) {
+			  return d.cov;
 			}
 
 			function zoom(d) {
