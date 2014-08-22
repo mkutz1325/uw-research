@@ -14,6 +14,10 @@
 			<div><select>
 			  <option value="req">Capacity Requirements</option>
 			  <option value="births">Births</option>
+			  <option value="volume">Total Vaccine Volume Distributed</option>
+			  <option value="cost">Cost of Ownership for District CC Equipment</option>
+			  <option value="energy">Energy Costs</option>
+			  <option value="maint">Maintenance Costs</option>
 			</select></div>
 		  </div>
 		</div>
@@ -25,7 +29,6 @@
 				color = d3.scale.category10(),
 				root,
 				node;
-				
 
 			var treemap = d3.layout.treemap()
 				.round(false)
@@ -80,10 +83,26 @@
 				  treemap.value(births).nodes(root);
 				  svg.selectAll("g.cell").select("text").text(function(d) {
 				    return d.parent.name + d.name + ": " + d.births});
-				} else {
+				} else if (this.value=="req") {
 				  treemap.value(req).nodes(root);
 				  svg.selectAll("g.cell").select("text").text(function(d) {
 				    return d.parent.name + d.name + ": " + d.req + "L"});
+				} else if (this.value=="volume") {
+				  treemap.value(volume).nodes(root);
+				  svg.selectAll("g.cell").select("text").text(function(d) {
+				    return d.parent.name + d.name + ": " + d.volume + "L"});
+				} else if (this.value=="cost") {
+				  treemap.value(cost).nodes(root);
+				  svg.selectAll("g.cell").select("text").text(function(d) {
+				    return d.parent.name + d.name + ": " + "$" + d.cost});				
+				} else if (this.value=="energy") {
+				  treemap.value(energy).nodes(root);
+				  svg.selectAll("g.cell").select("text").text(function(d) {
+				    return d.parent.name + d.name + ": " + "$" + d.energy});				
+				} else if (this.value=="maint") {
+				  treemap.value(maint).nodes(root);
+				  svg.selectAll("g.cell").select("text").text(function(d) {
+				    return d.parent.name + d.name + ": " + "$" + d.maint});				
 				}
 				zoom(node);
 			  });
@@ -92,17 +111,25 @@
 			function req(d) {
 			  return d.req;
 			}
-
-			function count(d) {
-			  return 1;
-			}
 			
 			function births(d) {
 			  return d.births;
 			}
 			
-			function cov(d) {
-			  return d.cov;
+			function volume(d) {
+			  return d.volume;
+			}
+			
+			function cost(d) {
+			  return d.cost;
+			}
+			
+			function energy(d) {
+			  return d.energy;
+			}
+			
+			function maint(d) {
+			  return d.maint;
 			}
 
 			function zoom(d) {
