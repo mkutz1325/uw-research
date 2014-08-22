@@ -6,12 +6,6 @@ Cloning the directory locally and running 'python manage.py runserver' from the 
 
 For a quick look at what the initial version looks like at the top level, there is a screenshot in the barchart/ directory.
 
-*Note: the Django is unfortunately named 'barchart' due to lack of foresight
+*Note: the Django project is unfortunately named 'barchart' due to lack of foresight
 
-First few things to improve:
-
--Labeling of regions. They are currently split by color, but it is not possible to tell which region is 'Region 1' or 'Region 3'.
-
--Labeling actual percentages and units. It gives an idea of how the proportions break down, but shouldn't leave the user guessing.
-
--Add an option for actual energy consumption in the drop-down list at the bottom of the page, and base it on the volume of vaccines that are delivered using a rough model that will be developed.
+This visualization is based on an example from Mike Bostok's d3 repository, which can be found here: http://mbostock.github.io/d3/talk/20111018/treemap.html
